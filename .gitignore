@@ -1,0 +1,59 @@
+# Build products and local test output
+.build/
+dist/
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.log
+tests/artifacts/
+tests/*.png
+tests/.ocr-smoke-*/
+
+# Python caches and machine-specific editor settings
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Private inputs and generated comparisons/reports
+/inputs/
+/archives/
+/results/
+~$*
+*.doc
+*.docx
+*.pdf
+*.csv
+
+# Reviewed user guides, synthetic fixtures and empty release-log template
+!/DocumentCompare-QuickGuide.docx
+!/tests/PilotTestPlan.docx
+!/tests/PilotFixtures/WF-four-archive.docx
+!/tests/PilotFixtures/WF-four-identical.docx
+!/tests/PilotFixtures/WF-five-added.docx
+!/tests/PilotFixtures/WF-three-deleted.docx
+!/tests/PilotFixtures/WF-three-archive.docx
+!/tests/PilotFixtures/WF-three-unrelated.docx
+!/tests/PilotFixtures/WF-four-formatting.docx
+!/tests/PilotFixtures/WF-move-archive.docx
+!/tests/PilotFixtures/WF-move-new.docx
+!/tests/PilotFixtures/EP-prepared-archive.docx
+!/tests/PilotFixtures/EP-prepared-identical.docx
+!/tests/PilotFixtures/EP-uncropped-archive.docx
+!/tests/PilotFixtures/EP-description-changed.docx
+!/tests/PilotFixtures/EP-claims-changed.docx
+!/tests/PilotFixtures/EP-both-changed.docx
+!/tests/PilotResults.csv

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Document Compare</title>
+  <desc>Two documents with opposing comparison arrows in RWS purple and pink.</desc>
+  <path d="M24 20H94L130 56V218H24Z" fill="#3E016F"/>
+  <path d="M92 20V58H130Z" fill="#E60054"/>
+  <path d="M92 48H192L238 94V242H92Z" fill="white"/>
+  <path d="M102 58H186L226 98V230H102Z" fill="white" stroke="#3E016F" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M188 60V96H224" fill="none" stroke="#3E016F" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M46 86H76" fill="none" stroke-width="12" stroke-linecap="round" stroke="white"/>
+  <path d="M124 204H192" fill="none" stroke-width="12" stroke-linecap="round" stroke="#E60054"/>
+  <path d="M184 166H50" fill="none" stroke="white" stroke-width="32" stroke-linecap="round"/>
+  <path d="M64 152L50 166L64 180" fill="none" stroke="white" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M56 126H190M176 112L190 126L176 140" fill="none" stroke="#E60054" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M184 166H50M64 152L50 166L64 180" fill="none" stroke="#3E016F" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
