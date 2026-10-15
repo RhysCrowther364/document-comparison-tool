@@ -524,8 +524,10 @@ namespace LocalDocumentCompare
                 if (!Regex.IsMatch(content, @"[\p{L}\p{N}]"))
                     throw new UserError("Local OCR did not recognise text in the " + label + " PDF. Review its scan quality and installed Windows OCR language, then try again.");
                 string recognizedDocx = Path.Combine(workingDirectory, label + "-recognised.docx");
-                DocxContent.CreateFromRecognizedText(recognizedDocx, content);
-                warnings.Add("The " + label + " PDF was recognised with local Windows OCR. Spelling, reading order, tables and layout may differ; review the recognised text. All pages were processed, including selectable-text pages.");
+                bool layoutRestored = OcrLayout.TryCreateDocument(recognizedDocx, content, Path.ChangeExtension(textPath, ".layout.json"));
+                warnings.Add("The " + label + " PDF was recognised with local Windows OCR. All pages were processed, including selectable-text pages. " +
+                    (layoutRestored ? "Page sizes, text sizes, indents and spacing were reconstructed where possible. Fonts, complex columns, tables and graphics may differ; review against the PDF." :
+                    "Page layout could not be reconstructed, so simple text formatting was used. Review spelling, reading order and layout against the PDF."));
                 source = recognizedDocx;
             }
             // A random password prevents a hidden password prompt for encrypted inputs.
@@ -619,13 +621,14 @@ namespace LocalDocumentCompare
             if (!File.Exists(script)) throw new UserError("The local OCR component is missing. Reinstall the complete application folder.");
             string output = Path.Combine(workingDirectory, label + "-ocr.txt");
             string status = Path.Combine(workingDirectory, label + "-ocr-status.json");
+            string layout = Path.ChangeExtension(output, ".layout.json");
             string powershell = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell", "v1.0", "powershell.exe");
             CheckCancelled(workingDirectory);
             var start = new ProcessStartInfo
             {
                 FileName = powershell,
                 Arguments = "-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File " + QuoteArgument(script) +
-                    " -InputPath " + QuoteArgument(input) + " -OutputPath " + QuoteArgument(output) + " -StatusPath " + QuoteArgument(status),
+                    " -InputPath " + QuoteArgument(input) + " -OutputPath " + QuoteArgument(output) + " -StatusPath " + QuoteArgument(status) + " -LayoutPath " + QuoteArgument(layout),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,

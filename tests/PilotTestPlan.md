@@ -1,6 +1,6 @@
 # Document Compare: pilot test plan
 
-For application version 1.0.20.0, team package refreshed 12 October 2026. This is a plan for the team to run; the supplied results log starts as **Not run**. It contains 44 scenarios. Prior checks on the development PC are recorded separately in `VALIDATION.md`; these do not mark the team's log as passed.
+For application version 1.0.21.0, team package refreshed 15 October 2026. This is a plan for the team to run; the supplied results log starts as **Not run**. It contains 44 scenarios. Prior checks on the development PC are recorded separately in `VALIDATION.md`; these do not mark the team's log as passed.
 
 ## How to run the pilot
 

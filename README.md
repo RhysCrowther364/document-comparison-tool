@@ -1,6 +1,6 @@
 # Local Document Compare
 
-Version 1.0.20.0 — team package refreshed on 12 October 2026. See [validation results](VALIDATION.md) for completed checks and [the acceptance checklist](tests/AcceptanceChecklist.md) for checks on the team's own configurations.
+Version 1.0.21.0 — team package and repository updated on 15 October 2026 after local review of OCR layout preservation. See [validation results](VALIDATION.md) for completed checks and [the acceptance checklist](tests/AcceptanceChecklist.md) for checks on the team's own configurations.
 
 A Windows desktop tool that compares an archive document with a new document using the installed Microsoft Word application. It saves a Word comparison with inserted text highlighted yellow and deletions and moves retained as tracked changes. Alongside the comparison, it reports crossover percentage, total new-text word count, and highlighted insertion word count. **Full Document** (WF) compares whole documents; **EP** reports these figures separately for Description, Full specification, and Claims. Use a single comparison for two files, **Batch comparison** for every ordered pair from a folder, or **Multi Archive** to find the best archive for one new document.
 
@@ -27,7 +27,7 @@ For rollout checks, use the [practical test plan](tests/PilotTestPlan.docx), [ed
 
 ## Install or run
 
-The branded `DocumentCompare-QuickGuide.docx` is a three-page handout covering single, batch and Multi Archive comparisons, results, language checks and OCR. The same current guide is included in the team ZIP and installed with the app.
+The branded `DocumentCompare-QuickGuide.docx` is a three-page handout covering single, batch and Multi Archive comparisons, results, language checks and OCR layout reconstruction. The current guide is included in the team ZIP and installed with the app.
 
 Distribute the entire `LocalDocumentCompare` release folder, keeping its files together.
 
@@ -45,7 +45,7 @@ The setup commands and OCR helper invoke Windows PowerShell with `-ExecutionPoli
 1. Choose **Full Document** for a whole-document comparison, or **EP** for a prepared European patent specification with reliable section headings. Full Document is selected by default. **Use Full Document when an EP new file is a PDF or a Word file converted from PDF:** conversion does not consistently preserve the section boundaries needed for EP's three scopes. Prepare both files to contain the same intended scope, removing covers, translated claims and separate drawings from checked copies where appropriate. Full Document counts all included text and gives one set of figures.
 2. Use **Browse** beside **Archive**, drag a file onto its input, or enter its full File Explorer path. Archive is the earlier version.
 3. Add **New** in the same way; it is the version to assess. Supported inputs are Word `.docx`/`.doc` documents and PDF files. Local, OneDrive and accessible shared-drive inputs are supported; use a file path rather than a web sharing link.
-4. For a PDF containing scans, select that input's local OCR option. This recognises the whole PDF as text and loses the original page layout. Leave OCR off for a normal PDF whose text can be selected.
+4. For a PDF containing scans, select that input's local OCR option. This recognises the whole PDF and reconstructs page sizes, approximate text sizes, indents and spacing where possible. Leave OCR off for a normal PDF whose text can be selected.
 5. Choose an output folder. The default is `%LOCALAPPDATA%\LocalDocumentCompare\Results`. Click **Desktop**, enter a folder path, or use **Browse**. You can save to local folders, company OneDrive folders or accessible shared drives, including UNC paths such as `\\server\share\folder` and mapped drives such as `S:\folder`. Shared locations require connectivity and write permission; OneDrive results may sync.
 6. Start the comparison. The app checks that archive and new text use the same source language before Word compares them. If it reports **Unknown** or **Mixed**, check both inputs yourself and use **Language checked — compare** only after confirming matching relevant source languages. A detected language mismatch remains blocked. Allow any Word conversion or OCR to finish; large files and PDFs can take longer than ordinary Word documents.
 7. Open the resulting `.docx` in Word. The filename uses the input names without their extensions: **`[new file name] vs [archive file name].docx`**. A `.txt` summary with the same name is saved alongside it. The result screen and saved summary show the three statistics for the whole document in Full Document, or for each of the three EP scopes.
@@ -149,7 +149,7 @@ For a text PDF, Word converts the PDF into editable text before comparison. Conv
 
 For Full Document, images in the converted PDF conservatively trigger an OCR requirement so a scanned page is not silently excluded. A logo or diagram can also trigger this check. In EP, the check applies to images inside the retained Description and Claims sections; images in excluded cover or drawing pages do not by themselves require OCR. Select local OCR for the affected PDF or use an editable Word source, then check the converted text.
 
-For a PDF with scanned pages, enable local OCR for that input. OCR processes the whole PDF, including any pages that already contain text, and produces a text-based document. It does not preserve the original page design. Recognition errors can appear as differences and affect the crossover percentage. Check names, numbers, small print, poor-quality scans, and mixed-language pages against the source. Handwriting and complicated layouts may not produce usable text.
+For a PDF with scanned pages, enable local OCR for that input. OCR processes the whole PDF, including any pages that already contain text, and produces an editable Word document. Recognised line positions reconstruct page sizes, approximate text sizes, indents and spacing. The recognised words, line order and page boundaries are preserved from the earlier OCR path. Missing or invalid layout information falls back to simple formatting, with a review note. Original font families, bold/italic styling, diagrams and semantic tables cannot be reliably recovered by Windows OCR; complex columns and tables can reflow. For close reproduction, use ABBYY separately to prepare and check a formatted DOCX, then compare that Word file. Recognition errors can appear as differences and affect crossover; check names, numbers, small print and mixed-language pages against the PDF.
 
 OCR uses one installed recognition language for the document. It prefers UK English, then US English, then an available language from the Windows profile or installed language list. It does not detect a different language for each page or download language packs. Check that the selected language suits the document; ask IT to install required Windows OCR language support through approved channels.
 

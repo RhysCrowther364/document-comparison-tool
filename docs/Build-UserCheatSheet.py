@@ -48,7 +48,7 @@ header.runs[-1].bold = True
 header.paragraph_format.space_after = Pt(0)
 footer = section.footer.paragraphs[0]
 footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-footer.add_run("RWS  |  User quick guide  |  v1.0.20  •  ").font.size = Pt(8)
+footer.add_run("RWS  |  User quick guide  |  v1.0.21  •  ").font.size = Pt(8)
 for instruction in ["PAGE", "NUMPAGES"]:
     if instruction == "NUMPAGES":
         footer.add_run(" / ")
@@ -142,7 +142,7 @@ doc.add_heading("Language checks", level=1)
 para("A known language mismatch stops a single comparison without output. A pop-up shows the scope and archive/new languages: select same-language inputs. Batch mismatch pairs fail while other pairs continue; one summary appears when finished or cancelled. Unknown/Mixed still stops for manual checking; in EP, check Description and original-language Claims separately.")
 para("After confirming matching languages, use Language checked — compare for a single job, or Language checked — continue for the paused batch pair. Batch confirmation applies only to that pair. Skip pair continues without its comparison. A known mismatch cannot be overridden.")
 doc.add_heading("PDFs, scans and ABBYY", level=1)
-para("For a PDF with selectable text, leave OCR off. For scanned PDF pages, select the local OCR option and review the recognised text: layout, tables and reading order may change. Pages with no recognised words block an incomplete result.")
+para("For selectable-text PDFs, leave OCR off. Scan mode reconstructs page sizes, text sizes, indents and spacing where possible. Review against the PDF: fonts, complex columns, tables and graphics may differ. Pages with no recognised words block an incomplete result.")
 para("ABBYY can be used separately to prepare a checked, editable DOCX before comparison. The app does not launch ABBYY; its built-in PDF OCR uses Windows. PDF OCR does not recover text from images embedded in Word files.")
 doc.add_heading("Save safely; recover when needed", level=1)
 para("Processing and OCR use local working copies; originals are not overwritten. Existing source revisions are accepted on copies. Browse or enter UNC (\\\\server\\share\\folder) / mapped-drive (S:\\folder) paths for shared files and results. Keep the drive connected and check read/write permissions. OneDrive outputs may sync; follow company storage rules. Word’s connected features follow company settings.")

@@ -226,7 +226,7 @@ namespace LocalDocumentCompare
                     if (picker.ShowDialog(this) == DialogResult.OK) destination.Text = picker.SelectedPath;
             };
             inputs.Controls.Add(folderBrowse);
-            inputs.Controls.Add(new Label { Name = "inputHint", Text = "Browse local or shared-drive locations, or drop files into the boxes above.\r\nPDF scan mode reads every page with local OCR and simplifies page layout.", AutoSize = false, Location = new Point(0, 324), Size = new Size(740, 30), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, ForeColor = BrandAppearance.Muted, Font = BrandAppearance.Font(9F, FontStyle.Regular) });
+            inputs.Controls.Add(new Label { Name = "inputHint", Text = "Browse local or shared-drive locations, or drop files into the boxes above.\r\nPDF scan mode reads every page locally and reconstructs layout where possible.", AutoSize = false, Location = new Point(0, 324), Size = new Size(740, 30), Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right, ForeColor = BrandAppearance.Muted, Font = BrandAppearance.Font(9F, FontStyle.Regular) });
 
             FlowLayoutPanel actions = new FlowLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(0, 6, 0, 0), WrapContents = false };
             compare.Text = "Compare documents";

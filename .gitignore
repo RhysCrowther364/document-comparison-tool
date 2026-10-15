@@ -10,6 +10,7 @@ obj/
 tests/artifacts/
 tests/*.png
 tests/.ocr-smoke-*/
+tests/.ocr-layout-*/
 
 # Python caches and machine-specific editor settings
 __pycache__/

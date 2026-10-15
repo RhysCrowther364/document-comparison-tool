@@ -3,13 +3,15 @@
 Runs Windows' installed OCR engine over every PDF page. No network access,
 Office automation, external executables, or package downloads are used.
 Output is UTF-8 text, with a form-feed character between pages.
+An optional numeric-only layout sidecar records page sizes and OCR line bounds.
 Invoke in Windows PowerShell 5.1, not PowerShell 7.
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$InputPath,
     [Parameter(Mandatory = $true)][string]$OutputPath,
-    [string]$StatusPath
+    [string]$StatusPath,
+    [string]$LayoutPath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -21,6 +23,10 @@ $writer = $null
 $partialPath = $null
 $statusFullPath = $null
 $createdOutput = $false
+$createdLayout = $false
+$layoutFullPath = $null
+$layoutPartialPath = $null
+$layoutPages = New-Object 'Collections.Generic.List[object]'
 $exitCode = 1
 
 function Write-Status {
@@ -66,13 +72,20 @@ try {
     $outputFullPath = Get-LocalPath $OutputPath
     $candidateStatusPath = $null
     if ($StatusPath) { $candidateStatusPath = Get-LocalPath $StatusPath }
-    if ($inputFullPath -ieq $outputFullPath -or $inputFullPath -ieq $candidateStatusPath -or $outputFullPath -ieq $candidateStatusPath) {
+    $candidateLayoutPath = $null
+    if ($LayoutPath) { $candidateLayoutPath = Get-LocalPath $LayoutPath }
+    $allPaths = @($inputFullPath, $outputFullPath, $candidateStatusPath, $candidateLayoutPath) | Where-Object { $_ }
+    if (@($allPaths | Sort-Object -Unique).Count -ne @($allPaths).Count) {
         throw 'Input, output, and status paths must differ.'
     }
     $statusFullPath = $candidateStatusPath
+    $layoutFullPath = $candidateLayoutPath
     if (-not [IO.File]::Exists($inputFullPath) -or [IO.Path]::GetExtension($inputFullPath) -ine '.pdf') { throw 'PDF not found.' }
     if ([IO.File]::Exists($outputFullPath)) { throw 'Output already exists.' }
     if (-not [IO.Directory]::Exists([IO.Path]::GetDirectoryName($outputFullPath))) { throw 'Output directory is missing.' }
+    if ($layoutFullPath -and ([IO.File]::Exists($layoutFullPath) -or -not [IO.Directory]::Exists([IO.Path]::GetDirectoryName($layoutFullPath)))) {
+        throw 'Layout output must be a new file in an existing local directory.'
+    }
     Write-Status
 
     $failureMessage = 'Windows local PDF/OCR components are unavailable. Use Windows 10 or 11 and Windows PowerShell 5.1.'
@@ -147,6 +160,30 @@ try {
             $result = Wait-WinRtOperation ($engine.RecognizeAsync($bitmap)) ([Windows.Media.Ocr.OcrResult])
             $lines = @($result.Lines | ForEach-Object { $_.Text })
             $pageText = $lines -join [Environment]::NewLine
+            if ($layoutFullPath) {
+                $lineBounds = New-Object 'Collections.Generic.List[object]'
+                foreach ($ocrLine in $result.Lines) {
+                    $lineLeft = [double]::PositiveInfinity
+                    $lineTop = [double]::PositiveInfinity
+                    $lineRight = [double]::NegativeInfinity
+                    $lineBottom = [double]::NegativeInfinity
+                    foreach ($ocrWord in $ocrLine.Words) {
+                        $rect = $ocrWord.BoundingRect
+                        $lineLeft = [Math]::Min($lineLeft, [double]$rect.X)
+                        $lineTop = [Math]::Min($lineTop, [double]$rect.Y)
+                        $lineRight = [Math]::Max($lineRight, [double]$rect.X + [double]$rect.Width)
+                        $lineBottom = [Math]::Max($lineBottom, [double]$rect.Y + [double]$rect.Height)
+                    }
+                    if ([double]::IsInfinity($lineLeft) -or [double]::IsInfinity($lineTop)) {
+                        # Invalid geometry falls back to simple Word formatting;
+                        # it must never discard otherwise readable OCR text.
+                        $lineBounds.Add([ordered]@{ X=0; Y=0; Width=0; Height=0 })
+                    } else {
+                        $lineBounds.Add([ordered]@{ X=$lineLeft; Y=$lineTop; Width=($lineRight-$lineLeft); Height=($lineBottom-$lineTop) })
+                    }
+                }
+                $layoutPages.Add([ordered]@{ Width=$width; Height=$height; ImageWidth=[int]$bitmap.PixelWidth; ImageHeight=[int]$bitmap.PixelHeight; Lines=@($lineBounds.ToArray()) })
+            }
             if ([string]::IsNullOrWhiteSpace($pageText)) { $status.BlankPages += ($index + 1) }
             if ($index -gt 0) { $writer.Write([char]12) }
             $writer.Write($pageText)
@@ -167,6 +204,14 @@ try {
         throw 'No readable text.'
     }
     $failureMessage = 'Local OCR could not finish saving its text output. Check local disk space and folder permissions.'
+    if ($layoutFullPath) {
+        $layoutPartialPath = $layoutFullPath + '.' + [Guid]::NewGuid().ToString('N') + '.partial'
+        $layoutData = [ordered]@{ Version=1; Pages=@($layoutPages.ToArray()) }
+        [IO.File]::WriteAllText($layoutPartialPath, ($layoutData | ConvertTo-Json -Depth 8 -Compress), $utf8)
+        [IO.File]::Move($layoutPartialPath, $layoutFullPath)
+        $createdLayout = $true
+        $layoutPartialPath = $null
+    }
     [IO.File]::Move($partialPath, $outputFullPath)
     $createdOutput = $true
     $partialPath = $null
@@ -185,8 +230,10 @@ catch {
 finally {
     if ($writer) { $writer.Dispose() }
     if ($partialPath -and [IO.File]::Exists($partialPath)) { [IO.File]::Delete($partialPath) }
+    if ($layoutPartialPath -and [IO.File]::Exists($layoutPartialPath)) { [IO.File]::Delete($layoutPartialPath) }
     # If the final status write failed after the atomic move, do not leave an
     # apparently usable result behind. This flag is set only for our own file.
     if ($exitCode -ne 0 -and $createdOutput -and [IO.File]::Exists($outputFullPath)) { [IO.File]::Delete($outputFullPath) }
+    if ($exitCode -ne 0 -and $createdLayout -and [IO.File]::Exists($layoutFullPath)) { [IO.File]::Delete($layoutFullPath) }
 }
 exit $exitCode

@@ -1,4 +1,4 @@
-Synthetic pilot fixtures for Document Compare 1.0.20.0.
+Synthetic pilot fixtures for Document Compare 1.0.21.0.
 No client content is present. Do not edit these reference files.
 See ../PilotTestPlan.docx or ../PilotTestPlan.md for archive/new pairs, WF/EP selection and expected results.
 Use approved copies of real EP/WF PDFs for PDF/OCR and complex-layout checks.

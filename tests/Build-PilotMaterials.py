@@ -5,7 +5,7 @@ import zipfile
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent
-APP_VERSION = "1.0.20.0"
+APP_VERSION = "1.0.21.0"
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 ET.register_namespace("w", W)

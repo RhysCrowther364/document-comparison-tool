@@ -4,6 +4,8 @@ Use synthetic documents without confidential information. Record the application
 
 ## Appearance
 
+For OCR layout in 1.0.21, compare representative scanned PDFs with the same pairs used on 1.0.20. Check that counts and crossover remain consistent, while original paper sizes, relative heading sizes, paragraph gaps and indents are easier to follow. Check the first, middle and last pages against the PDF. Complex columns/tables can still flow sequentially, and exact font styling or diagrams are not reconstructed. Use a checked ABBYY DOCX where close layout reproduction is essential.
+
 - [ ] Confirm the primary full-colour RWS header logo with black wordmark appears on white, keeps its aspect ratio, and has clear surrounding space. Check the app and installed desktop icon show the distinct two-document comparison symbol with purple/pink opposing arrows, readable on light and dark backgrounds.
 - [ ] Confirm Galaxy Purple buttons/headings, Hillier Pink accent, white backgrounds and neutral borders match the supplied signage guide. Check enabled, disabled, hover, focus and selected states remain readable.
 - [ ] Where Articulat CF is installed, confirm the app uses it. On other PCs, confirm the Arial fallback renders correctly without font downloads.
@@ -114,7 +116,7 @@ Use longer natural passages as well as these small fixtures: Word's decisions on
 - [ ] Test unsupported/missing OCR language support. Confirm a useful error and no misleading success result.
 - [ ] Include a genuinely blank PDF page and a page containing only a picture. Confirm a page with no recognised text stops comparison and the guidance explains checked transcription or removing genuinely blank pages from a copy. Confirm incomplete page-processing status also stops comparison.
 - [ ] Confirm OCR does not silently truncate large pages or long documents; sample text from the first, middle, and last pages.
-- [ ] Confirm the OCR option clearly explains that full-PDF text recognition loses original page layout.
+- [ ] Confirm the OCR option explains that every page is recognised locally and layout is reconstructed where possible. Check source page sizes, relative text sizes, spacing and indents, while allowing the documented font, column, table and graphics limitations.
 
 ## Desktop operation and failures
 
