@@ -1,6 +1,6 @@
 # Local Document Compare
 
-Version 1.0.21.0 — team package and repository updated on 15 October 2026 after local review of OCR layout preservation. See [validation results](VALIDATION.md) for completed checks and [the acceptance checklist](tests/AcceptanceChecklist.md) for checks on the team's own configurations.
+Version 1.0.21.0 — rollout documentation refreshed on 20 October 2026 with the edited Cheat Sheet. The OCR layout update was approved on 15 October. See [validation results](VALIDATION.md) for completed checks and [the acceptance checklist](tests/AcceptanceChecklist.md) for checks on the team's own configurations.
 
 A Windows desktop tool that compares an archive document with a new document using the installed Microsoft Word application. It saves a Word comparison with inserted text highlighted yellow and deletions and moves retained as tracked changes. Alongside the comparison, it reports crossover percentage, total new-text word count, and highlighted insertion word count. **Full Document** (WF) compares whole documents; **EP** reports these figures separately for Description, Full specification, and Claims. Use a single comparison for two files, **Batch comparison** for every ordered pair from a folder, or **Multi Archive** to find the best archive for one new document.
 
@@ -8,7 +8,9 @@ The interface uses the primary RWS logo, Galaxy Purple, Hillier Pink, white surf
 
 ## Build from source
 
-On Windows with .NET Framework 4.8, run `build.ps1` from PowerShell to compile the app into `dist\LocalDocumentCompare`. Run `package.ps1` to build the complete team ZIP and checksum in `dist`. Building and packaging do not require Python; the repository includes the current generated Word guides and reviewed synthetic fixtures.
+On Windows with .NET Framework 4.8, run `build.ps1` from PowerShell to compile the app into `dist\LocalDocumentCompare`. Run `package.ps1` to build the complete team ZIP and checksum in `dist`. Building and packaging do not require Python; the repository includes the maintained Cheat Sheet, Word test plan and reviewed synthetic fixtures.
+
+`Document Comparison Tool Cheat Sheet.docx` is the maintained user handout. Builds copy it unchanged and require it to be present. Edit that Word file directly. The historical `docs/Build-UserCheatSheet.py` generator produces only an ignored `.build/DocumentCompare-CheatSheet-draft.docx` draft; it does not replace the maintained document or its manual edits.
 
 The C# source, scripts, branding assets, documentation and synthetic fixtures belong in Git. Build output, local test artifacts, Python caches, private Word/PDF inputs and generated comparison reports are excluded by `.gitignore`. `tests/PilotResults.csv` is an uncompleted release template; keep filled-in pilot logs outside the repository.
 
@@ -27,7 +29,7 @@ For rollout checks, use the [practical test plan](tests/PilotTestPlan.docx), [ed
 
 ## Install or run
 
-The branded `DocumentCompare-QuickGuide.docx` is a three-page handout covering single, batch and Multi Archive comparisons, results, language checks and OCR layout reconstruction. The current guide is included in the team ZIP and installed with the app.
+The branded `Document Comparison Tool Cheat Sheet.docx` covers single, batch and Multi Archive comparisons, results, language checks and OCR layout reconstruction. The current edited document is included in the team ZIP and installed with the app, replacing the former QuickGuide filename.
 
 Distribute the entire `LocalDocumentCompare` release folder, keeping its files together.
 

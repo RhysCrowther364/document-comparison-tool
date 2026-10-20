@@ -1,5 +1,11 @@
 # Validation
 
+## Cheat Sheet rollout refresh — 20 October 2026 — app version 1.0.21.0
+
+Adopted the user's manually edited `Document Comparison Tool Cheat Sheet.docx` as the maintained user handout. The document is copied unchanged into the team package and installation. Git explicitly includes the new filename and removes the former QuickGuide. The template generator now writes an ignored draft only, preventing it from overwriting manual edits. Builds require the maintained file and remove the old guide from the release folder; installation replaces the old package-managed guide after copying the new document.
+
+The source document passed ZIP/relationship integrity checks and contains no external links, macros, comments or tracked changes. Release verification compares its exact SHA256 (28B51D014C03B323FF1F535A96CC726A96CCB1C517E4ABF48903B47F7D627325) between the source, ZIP, installed copy and desktop handout. The 30-file package and checksum, extracted app startup and installer migration are checked; saved results and an existing pilot log are preserved. This documentation/packaging change leaves comparison behavior and app version 1.0.21.0 unchanged, so the earlier functional checks remain applicable.
+
 ## Team rollout refresh — 15 October 2026 — version 1.0.21.0
 
 The user confirmed that the local OCR layout update works and approved updating the team package and public repository. Version 1.0.21.0 includes the tested OCR geometry helper and Word layout builder, with the current RWS quick guide, acceptance checklist and updated Word/text test plan. Recognition, counting, crossover and language-check rules are unchanged. The documented approximation of fonts, complex columns, tables and graphics still applies.

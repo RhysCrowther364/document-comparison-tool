@@ -1,5 +1,10 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
+$cheatSheetName = 'Document Comparison Tool Cheat Sheet.docx'
+$cheatSheetPath = Join-Path $projectRoot $cheatSheetName
+if (-not (Test-Path -LiteralPath $cheatSheetPath -PathType Leaf)) {
+    throw 'The maintained Cheat Sheet is missing. Restore it before building the team package.'
+}
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
 if (-not (Test-Path -LiteralPath $compiler)) { $compiler = Join-Path $env:WINDIR 'Microsoft.NET\Framework\v4.0.30319\csc.exe' }
 $dist = Join-Path $projectRoot 'dist\LocalDocumentCompare'
@@ -24,10 +29,12 @@ Copy-Item -LiteralPath (Join-Path $projectRoot 'src\DocumentCompare.exe.config')
 Copy-Item -LiteralPath (Join-Path $projectRoot 'src\assets\document-compare.ico') -Destination (Join-Path $dist 'DocumentCompare-icon-1.0.8.ico') -Force
 New-Item -ItemType Directory -Path (Join-Path $dist 'scripts') -Force | Out-Null
 Get-ChildItem -LiteralPath (Join-Path $projectRoot 'scripts') -File | Copy-Item -Destination (Join-Path $dist 'scripts') -Force
-foreach ($file in @('README.md', 'VALIDATION.md', 'Install.cmd', 'Uninstall.cmd', 'DocumentCompare-QuickGuide.docx')) {
+foreach ($file in @('README.md', 'VALIDATION.md', 'Install.cmd', 'Uninstall.cmd', $cheatSheetName)) {
     $sourcePath = Join-Path $projectRoot $file
     if (Test-Path -LiteralPath $sourcePath) { Copy-Item -LiteralPath $sourcePath -Destination $dist -Force }
 }
+$legacyGuidePath = Join-Path $dist 'DocumentCompare-QuickGuide.docx'
+if (Test-Path -LiteralPath $legacyGuidePath -PathType Leaf) { Remove-Item -LiteralPath $legacyGuidePath -Force }
 New-Item -ItemType Directory -Path (Join-Path $dist 'tests') -Force | Out-Null
 foreach ($testFile in @('AcceptanceChecklist.md', 'PilotTestPlan.md', 'PilotTestPlan.docx', 'PilotResults.csv')) {
     Copy-Item -LiteralPath (Join-Path (Join-Path $projectRoot 'tests') $testFile) -Destination (Join-Path $dist 'tests') -Force

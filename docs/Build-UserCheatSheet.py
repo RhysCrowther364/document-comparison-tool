@@ -1,4 +1,7 @@
-"""Build the three-page user handout from local RWS assets; no network access."""
+"""Generate a legacy-template draft only; the maintained Cheat Sheet is edited in Word.
+
+The draft goes to ignored .build output and never replaces the maintained document.
+"""
 from pathlib import Path
 from docx import Document
 from docx.shared import Mm, Pt, RGBColor
@@ -7,7 +10,8 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "DocumentCompare-QuickGuide.docx"
+OUT = ROOT / ".build" / "DocumentCompare-CheatSheet-draft.docx"
+OUT.parent.mkdir(parents=True, exist_ok=True)
 PURPLE, PINK = "3E016F", "E60054"
 doc = Document()
 section = doc.sections[0]

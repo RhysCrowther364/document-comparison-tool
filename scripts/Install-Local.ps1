@@ -4,7 +4,8 @@ $sourceRoot = Split-Path -Parent $PSScriptRoot
 $appRoot = Join-Path $env:LOCALAPPDATA 'LocalDocumentCompare'
 $desktopPath = [Environment]::GetFolderPath('Desktop')
 $shortcutPath = Join-Path $desktopPath 'Document Compare.lnk'
-$managedNames = @('DocumentCompare.exe', 'DocumentCompare.exe.config', 'DocumentCompare-icon-1.0.8.ico', 'README.md', 'VALIDATION.md', 'Install.cmd', 'Uninstall.cmd', 'DocumentCompare-QuickGuide.docx')
+$managedNames = @('DocumentCompare.exe', 'DocumentCompare.exe.config', 'DocumentCompare-icon-1.0.8.ico', 'README.md', 'VALIDATION.md', 'Install.cmd', 'Uninstall.cmd', 'Document Comparison Tool Cheat Sheet.docx')
+$legacyNames = @('DocumentCompare-QuickGuide.docx')
 $managedScripts = @('Convert-PdfLocal.ps1', 'Install-Local.ps1')
 $managedTests = @('AcceptanceChecklist.md', 'PilotTestPlan.md', 'PilotTestPlan.docx')
 $managedFixtures = @('README.txt', 'WF-four-archive.docx', 'WF-four-identical.docx', 'WF-five-added.docx',
@@ -26,7 +27,7 @@ try {
             [void][Runtime.InteropServices.Marshal]::FinalReleaseComObject($shell)
         }
         # Remove only files installed by this package. Results and other files stay.
-        foreach ($name in $managedNames) {
+        foreach ($name in ($managedNames + $legacyNames)) {
             $filePath = Join-Path $appRoot $name
             if (Test-Path -LiteralPath $filePath) { Remove-Item -LiteralPath $filePath -Force }
         }
@@ -65,6 +66,12 @@ try {
             foreach ($name in $managedFixtures) {
                 Copy-Item -LiteralPath (Join-Path (Join-Path $sourceRoot 'tests\PilotFixtures') $name) -Destination (Join-Path $appRoot 'tests\PilotFixtures') -Force
             }
+        }
+        # The renamed guide replaces the previous package-managed QuickGuide.
+        # Only remove the legacy copy after the new document has been copied.
+        foreach ($name in $legacyNames) {
+            $legacyPath = Join-Path $appRoot $name
+            if (Test-Path -LiteralPath $legacyPath -PathType Leaf) { Remove-Item -LiteralPath $legacyPath -Force }
         }
         $shell = New-Object -ComObject WScript.Shell
         $shortcut = $shell.CreateShortcut($shortcutPath)

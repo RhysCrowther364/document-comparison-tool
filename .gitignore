@@ -40,7 +40,7 @@ venv/
 *.csv
 
 # Reviewed user guides, synthetic fixtures and empty release-log template
-!/DocumentCompare-QuickGuide.docx
+!/Document Comparison Tool Cheat Sheet.docx
 !/tests/PilotTestPlan.docx
 !/tests/PilotFixtures/WF-four-archive.docx
 !/tests/PilotFixtures/WF-four-identical.docx
